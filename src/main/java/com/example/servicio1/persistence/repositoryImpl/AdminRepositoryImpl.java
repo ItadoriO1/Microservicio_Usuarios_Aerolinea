@@ -11,11 +11,13 @@ import com.example.servicio1.persistence.entity.Admin;
 import com.example.servicio1.persistence.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Repository
 public class AdminRepositoryImpl implements AdminRepository {
 
     @Autowired
