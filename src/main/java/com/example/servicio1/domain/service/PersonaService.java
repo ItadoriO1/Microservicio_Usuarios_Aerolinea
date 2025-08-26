@@ -17,7 +17,7 @@ public class PersonaService {
     public Iterable<PersonaDTO> getAllPersonas(){ return personaRepository.findAll(); }
 
     //Obtener una Persona por ID
-    public Optional<PersonaDTO> getPrsonaById(Long id){ return personaRepository.findById(id); }
+    public Optional<PersonaDTO> getPersonaById(Long id){ return personaRepository.findById(id); }
 
     //Guardar una Persona
     public PersonaDTO savePersona(PersonaDTO persona){ return personaRepository.save(persona); }

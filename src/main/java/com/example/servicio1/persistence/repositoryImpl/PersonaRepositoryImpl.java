@@ -40,14 +40,15 @@ public class PersonaRepositoryImpl implements PersonaRepository {
     @Override
     public PersonaDTO save(PersonaDTO personaDTO) {
         Persona persona = personaMapper.toEntity(personaDTO);
-        if(! existsById(persona.getId())){
-            String hashed = passwordEncoder.encode(personaDTO.getContrasenia());
-            personaDTO.setContrasenia(hashed);
-
-            Persona savedPersona = personaCrudRepository.save(persona);
-            return personaMapper.toDTO(savedPersona);
+        if(persona.getId() != null && existsById(persona.getId())){
+            throw new IllegalArgumentException("El registro ya existe");
         }
-        throw new IllegalArgumentException("El registro ya existe");
+        String hashed = passwordEncoder.encode(personaDTO.getContrasenia());
+        personaDTO.setContrasenia(hashed);
+
+        Persona savedPersona = personaCrudRepository.save(persona);
+        return personaMapper.toDTO(savedPersona);
+
     }
 
     @Override
