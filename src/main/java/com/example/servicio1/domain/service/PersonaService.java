@@ -24,7 +24,7 @@ public class PersonaService {
 
     //Actualizar una Persona existente
     public PersonaDTO updatePersona(PersonaDTO persona){
-        if(personaRepository.existsById(persona.getId())){
+        if(!personaRepository.existsById(persona.getId())){
             throw new RuntimeException("La persona con ID " + persona.getId() + " no existe");
         }
         return personaRepository.update(persona);

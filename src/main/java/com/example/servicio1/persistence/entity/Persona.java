@@ -42,6 +42,7 @@ public class Persona {
     //Enum interno para definir los roles
     public enum Rol{
         Usuario,
-        Admin
+        Admin,
+        Empleado
     }
 }

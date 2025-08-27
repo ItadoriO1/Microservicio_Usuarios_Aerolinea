@@ -6,18 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "usuario")
+@Table(name = "empleado")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Usuario extends Persona{
+public class Empleado extends Persona{
 
-    @Column(name = "direccion")
-    private String direccion;
+    @Column(name = "salario")
+    private Double salario;
+
+    @Column(name = "cargo")
+    private String cargo;
 
     @PrePersist
     public void prePersist() {
-        this.setRol(Rol.Usuario);
+        this.setRol(Rol.Empleado);
     }
 }

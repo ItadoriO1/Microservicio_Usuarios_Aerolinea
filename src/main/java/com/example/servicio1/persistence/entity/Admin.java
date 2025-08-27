@@ -21,4 +21,9 @@ public class Admin extends Persona{
 
     @Column(name = "permisos", nullable = false)
     private String permiso; // Ejemplo : "Gestionar vuelos, Gestionar aviones, Gestionar reservas, etc"
+
+    @PrePersist
+    public void prePersist() {
+        this.setRol(Rol.Admin);
+    }
 }
