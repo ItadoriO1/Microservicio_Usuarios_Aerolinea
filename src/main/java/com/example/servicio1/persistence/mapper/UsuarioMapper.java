@@ -11,6 +11,7 @@ public interface UsuarioMapper {
 
     //Mapeo de Usuario a UsuarioDTO
     @Mapping(source = "direccion", target = "direccion")
+    @Mapping(source = "reservaId", target = "reservaId")
     UsuarioDTO toDTO(Usuario usuario);
 
     //Mapeo inverso

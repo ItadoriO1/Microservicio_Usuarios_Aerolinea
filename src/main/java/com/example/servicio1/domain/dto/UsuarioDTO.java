@@ -12,4 +12,7 @@ public class UsuarioDTO extends PersonaDTO {
 
     @NotBlank(message = "La direccion de la persona no puede estar vacia")
     private String direccion;
+
+    @NotBlank(message = "El id de la reserva no puede estar vacio")
+    private String reservaId;
 }

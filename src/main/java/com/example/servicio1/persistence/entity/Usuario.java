@@ -16,6 +16,9 @@ public class Usuario extends Persona{
     @Column(name = "direccion")
     private String direccion;
 
+    @Column(name = "reservaId")
+    private String reservaId;
+
     @PrePersist
     public void prePersist() {
         this.setRol(Rol.Usuario);
