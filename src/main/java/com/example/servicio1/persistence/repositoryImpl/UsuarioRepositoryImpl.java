@@ -61,6 +61,8 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
     public UsuarioDTO update(UsuarioDTO usuarioDTO) {
         Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
         validateForUpdate(usuario);
+        String hashed = passwordEncoder.encode(usuarioDTO.getContrasenia());
+        usuario.setContrasenia(hashed);
 
         Usuario updateUsuario = usuarioCrudRepository.save(usuario);
         return  usuarioMapper.toDTO(updateUsuario);

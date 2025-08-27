@@ -50,7 +50,7 @@ public class EmpleadoRepositoryImpl implements EmpleadoRepository {
         Empleado empleado = empleadoMapper.toEntity(empleadoDTO);
         validateForSave(empleado);
         String hashed = passwordEncoder.encode(empleadoDTO.getContrasenia());
-        empleadoDTO.setContrasenia(hashed);
+        empleado.setContrasenia(hashed);
 
         Empleado empleadoSaved = empleadoCrudRepository.save(empleado);
         return empleadoMapper.toDTO(empleadoSaved);
@@ -61,6 +61,8 @@ public class EmpleadoRepositoryImpl implements EmpleadoRepository {
     public EmpleadoDTO update(EmpleadoDTO empleadoDTO) {
         Empleado empleado = empleadoMapper.toEntity(empleadoDTO);
         validateForUpdate(empleado);
+        String hashed = passwordEncoder.encode(empleadoDTO.getContrasenia());
+        empleado.setContrasenia(hashed);
 
         Empleado empleadoUpdate = empleadoCrudRepository.save(empleado);
         return empleadoMapper.toDTO(empleadoUpdate);

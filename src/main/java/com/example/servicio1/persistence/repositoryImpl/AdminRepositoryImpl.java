@@ -49,7 +49,7 @@ public class AdminRepositoryImpl implements AdminRepository {
         Admin admin = adminMapper.toEntity(adminDTO);
         validateForSave(admin);
         String hashed = passwordEncoder.encode(adminDTO.getContrasenia());
-        adminDTO.setContrasenia(hashed);
+        admin.setContrasenia(hashed);
 
         Admin savedAdmin = adminCrudRepository.save(admin);
         return adminMapper.toDTO(savedAdmin);
@@ -59,6 +59,8 @@ public class AdminRepositoryImpl implements AdminRepository {
     public AdminDTO update(AdminDTO adminDTO) {
         Admin admin = adminMapper.toEntity(adminDTO);
         validateForUpdate(admin);
+        String hashed = passwordEncoder.encode(adminDTO.getContrasenia());
+        admin.setContrasenia(hashed);
 
         Admin updateAdmin = adminCrudRepository.save(admin);
         return adminMapper.toDTO(updateAdmin);

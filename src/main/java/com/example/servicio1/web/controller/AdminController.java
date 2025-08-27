@@ -91,7 +91,7 @@ public class AdminController {
     }
 
     //Contar el numero total de admins
-    @Operation(summary = "Contal la cantidad de admins", description = "Retorna el total de admins registrados")
+    @Operation(summary = "Contar la cantidad de admins", description = "Retorna el total de admins registrados")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cantidad de registros", content = @Content(mediaType = "application/json"))
     })
