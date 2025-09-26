@@ -33,4 +33,7 @@ public interface UsuarioRepository {
 
     //Consultar por cedula
     Optional<UsuarioDTO> findByCedula(String cedula);
+
+    //Actualizar contraseña
+    Optional<UsuarioDTO> PutContrasenia(long id, String contrasenia);
 }

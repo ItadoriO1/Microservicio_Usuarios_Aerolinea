@@ -1,6 +1,7 @@
 package com.example.servicio1.web.controller;
 
 import com.example.servicio1.domain.dto.AdminDTO;
+import com.example.servicio1.domain.dto.UpdatePasswordRequest;
 import com.example.servicio1.domain.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,6 +79,21 @@ public class AdminController {
         return ResponseEntity.ok(updateAdmin);
     }
 
+    //Actualizar contraseña de admin por ID
+    @Operation(summary = "Actualizar contraseña de admin por id", description = "Actualiza la contraseña del admin")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Admin actualizado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdminDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Solicitud invalida", content =  @Content),
+            @ApiResponse(responseCode = "404", description = "Admin no encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @PatchMapping("/updatePassword/{id}")
+    public ResponseEntity<AdminDTO> updatePassword(@PathVariable @Parameter(description = "ID del admin") Long id,
+                                                   @Valid @RequestBody @Parameter(description = "Contraseña actualizada") UpdatePasswordRequest password){
+        AdminDTO updateAdmin = adminService.PutContrasenia(id, password.getPassword());
+        return ResponseEntity.ok(updateAdmin);
+    }
+
     //Eliminar Admin
     @Operation(summary = "Eliminar un admin por ID", description = "Elimina un admin segun el ID")
     @ApiResponses(value = {
@@ -99,5 +116,31 @@ public class AdminController {
     public ResponseEntity<Long> getAdminCount(){
         long count = adminService.countAdmins();
         return ResponseEntity.ok(count);
+    }
+
+    //Obtener un admin por email
+    @Operation(summary = "Obtener un admin por email proporcionado", description = "Retorna un admin segun el email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Admin encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdminDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @GetMapping("/email/{email}")
+    public ResponseEntity<AdminDTO> getAdminByEmail(@PathVariable @Parameter(description = "Email del admin") String email) {
+        AdminDTO adminDTO = adminService.getAdminByEmail(email);
+        return ResponseEntity.ok(adminDTO);
+    }
+
+    //Obtener un admin por cedula
+    @Operation(summary = "Obtener un admin por cedula proporcionada", description = "Retorna un admin segun la cedula")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Admin encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AdminDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @GetMapping("/cedula/{cedula}")
+    public ResponseEntity<AdminDTO> getAdminByECedula(@PathVariable @Parameter(description = "Cedula del admin") String cedula) {
+        AdminDTO adminDTO = adminService.getAdminByCedula(cedula);
+        return ResponseEntity.ok(adminDTO);
     }
 }

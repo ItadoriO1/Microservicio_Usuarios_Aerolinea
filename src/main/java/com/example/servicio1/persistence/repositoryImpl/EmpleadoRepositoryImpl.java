@@ -12,6 +12,7 @@ import com.example.servicio1.persistence.mapper.EmpleadoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,6 +94,24 @@ public class EmpleadoRepositoryImpl implements EmpleadoRepository {
     @Override
     public Optional<EmpleadoDTO> findByCedula(String cedula) {
         return empleadoCrudRepository.findByCedula(cedula)
+                .map(empleadoMapper::toDTO);
+    }
+
+    @Override
+    @Transactional
+    public Optional<EmpleadoDTO> PutContrasenia(long id, String contrasenia) {
+        validateEmpleadoExists(id);
+        return empleadoCrudRepository.findById(id).map(empleado -> {
+            String hashed = passwordEncoder.encode(contrasenia);
+            empleado.setContrasenia(hashed);
+            Empleado updateEmpleado = empleadoCrudRepository.save(empleado);
+            return empleadoMapper.toDTO(updateEmpleado);
+        });
+    }
+
+    @Override
+    public Optional<EmpleadoDTO> findByCargo(String cargo) {
+        return empleadoCrudRepository.findByCargo(cargo)
                 .map(empleadoMapper::toDTO);
     }
 

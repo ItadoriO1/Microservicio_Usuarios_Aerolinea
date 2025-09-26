@@ -19,4 +19,6 @@ public interface UsuarioService {
     UsuarioDTO getUsuarioByEmail(String email);
 
     UsuarioDTO getUsuarioByCedula(String cedula);
+
+    UsuarioDTO PutContrasenia(Long id, String contrasenia);
 }

@@ -69,6 +69,12 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuario.get();
     }
 
+    @Override
+    public UsuarioDTO PutContrasenia(Long id, String password) {
+        validateUsuarioExists(id);
+        return usuarioRepository.PutContrasenia(id,password).orElseThrow(() -> new UsuarioNotFoundException("usuario","id",id));
+    }
+
     private void validateUsuarioExists(Long id) {
         if (!usuarioRepository.existsById(id)) {
             throw new UsuarioNotFoundException("propietario", "id", id);

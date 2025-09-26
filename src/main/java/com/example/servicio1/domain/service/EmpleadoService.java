@@ -19,4 +19,8 @@ public interface EmpleadoService {
     EmpleadoDTO getEmpleadoByEmail(String email);
 
     EmpleadoDTO getEmpleadoByCedula(String cedula);
+
+    EmpleadoDTO PutContrasenia(Long id, String contrasenia);
+
+    EmpleadoDTO getEmpleadoByCargo(String cargo);
 }

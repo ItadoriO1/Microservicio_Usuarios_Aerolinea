@@ -32,4 +32,9 @@ public interface EmpleadoRepository {
 
     //Consultar por cedula
     Optional<EmpleadoDTO> findByCedula(String cedula);
+
+    //Actualizar contraseña
+    Optional<EmpleadoDTO> PutContrasenia(long id, String contrasenia);
+
+    Optional<EmpleadoDTO> findByCargo(String cargo);
 }

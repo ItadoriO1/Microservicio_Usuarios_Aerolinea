@@ -10,4 +10,6 @@ public interface EmpleadoCrudRepository extends CrudRepository<Empleado, Long> {
     Optional<Empleado> findByEmail(String email);
 
     Optional<Empleado> findByCedula(String cedula);
+
+    Optional<Empleado> findByCargo(String cargo);
 }

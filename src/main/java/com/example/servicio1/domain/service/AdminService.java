@@ -19,4 +19,6 @@ public interface AdminService {
     AdminDTO getAdminByEmail(String email);
 
     AdminDTO getAdminByCedula(String cedula);
+
+    AdminDTO PutContrasenia(Long id, String contrasenia);
 }

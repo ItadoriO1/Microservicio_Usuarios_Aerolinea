@@ -1,5 +1,6 @@
 package com.example.servicio1.web.controller;
 
+import com.example.servicio1.domain.dto.UpdatePasswordRequest;
 import com.example.servicio1.domain.dto.UsuarioDTO;
 import com.example.servicio1.domain.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -76,6 +78,21 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioDTO);
     }
 
+    //Actualizar contraseña de un usuario por ID
+    @Operation(summary = "Actualizar contraseña de usuario por ID", description = "Actualiza la contraseña de um usuaio existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content =  @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @PatchMapping("/updatePassword/{id}")
+    public ResponseEntity<UsuarioDTO> updatePassword(@PathVariable @Parameter(description = "ID del usuario") long id,
+                                                     @Valid @RequestBody @Parameter(description = "Contraseña actualizada")UpdatePasswordRequest updatePasswordRequest){
+        UsuarioDTO updateUsuario = usuarioService.PutContrasenia(id,updatePasswordRequest.getPassword());
+        return ResponseEntity.ok(updateUsuario);
+    }
+
     //Eliminar un usuario
     @Operation(summary = "Eliminar un usuario por ID", description = "Elimina un usuario del sistema segun el ID")
     @ApiResponses(value = {
@@ -99,4 +116,32 @@ public class UsuarioController {
         long count = usuarioService.countUsuarios();
         return ResponseEntity.ok(count);
     }
+
+    //Obtener un usuario por email
+    @Operation(summary = "Obtener un usuario por email proporcionado", description = "Retorna un usuario segun el email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UsuarioDTO> getUsuarioByEmail(@PathVariable @Parameter(description = "Email del usuario") String email) {
+        UsuarioDTO usuarioDTO = usuarioService.getUsuarioByEmail(email);
+        return ResponseEntity.ok(usuarioDTO);
+    }
+
+    //Obtener un usuario por cedula
+    @Operation(summary = "Obtener un usuario por cedula proporcionada", description = "Retorna un usuario segun la cedula")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuario encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @GetMapping("/cedula/{cedula}")
+    public ResponseEntity<UsuarioDTO> getUsuarioByECedula(@PathVariable @Parameter(description = "Cedula del usuario") String cedula) {
+        UsuarioDTO usuarioDTO = usuarioService.getUsuarioByCedula(cedula);
+        return ResponseEntity.ok(usuarioDTO);
+    }
+
+
 }

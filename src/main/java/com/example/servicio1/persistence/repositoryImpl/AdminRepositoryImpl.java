@@ -12,6 +12,7 @@ import com.example.servicio1.persistence.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -90,6 +91,17 @@ public class AdminRepositoryImpl implements AdminRepository {
                 .map(adminMapper::toDTO);
     }
 
+    @Override
+    @Transactional
+    public Optional<AdminDTO> PutContrasenia(long id, String contrasenia) {
+        validateAdminExists(id);
+        return adminCrudRepository.findById(id).map(admin -> {
+            String hashed = passwordEncoder.encode(contrasenia);
+            admin.setContrasenia(hashed);
+            Admin updatedAdmin = adminCrudRepository.save(admin);
+            return adminMapper.toDTO(updatedAdmin);
+        });
+    }
 
 
     // Métodos de validación privados

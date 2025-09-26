@@ -59,4 +59,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         return empleadoRepository.findByCedula(cedula)
                 .orElseThrow(() -> new EmpleadoNotFoundException("empleado","empleado cedula", cedula));
     }
+
+    @Override
+    public EmpleadoDTO PutContrasenia(Long id, String password) { return empleadoRepository.PutContrasenia(id,password).orElseThrow(() -> new EmpleadoNotFoundException("empleado","empleado id", id)); }
+
+    @Override
+    public EmpleadoDTO getEmpleadoByCargo(String cargo) {
+        return empleadoRepository.findByCargo(cargo)
+                .orElseThrow(() -> new EmpleadoNotFoundException("empleado","empleado cargo", cargo));
+    }
 }

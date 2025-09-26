@@ -32,4 +32,7 @@ public interface AdminRepository {
 
     //Consultar por cedula
     Optional<AdminDTO> findByCedula(String cedula);
+
+    //Actualizar contraseña
+    Optional<AdminDTO> PutContrasenia(long id, String contrasenia);
 }

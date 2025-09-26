@@ -96,6 +96,17 @@ public class UsuarioRepositoryImpl implements UsuarioRepository {
                 .map(usuarioMapper::toDTO);
     }
 
+    @Override
+    public Optional<UsuarioDTO> PutContrasenia(long id, String contrasenia) {
+        validateUsuarioExists(id);
+        return usuarioCrudRepository.findById(id).map(usuario -> {
+            String hashed = passwordEncoder.encode(contrasenia);
+            usuario.setContrasenia(hashed);
+            Usuario updateUsuario = usuarioCrudRepository.save(usuario);
+            return usuarioMapper.toDTO(updateUsuario);
+        });
+    }
+
     // Métodos de validación privados
 
     private void validateForSave(Usuario usuario) {

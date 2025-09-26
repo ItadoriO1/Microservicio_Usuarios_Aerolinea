@@ -56,4 +56,7 @@ public class AdminServiceImpl implements AdminService {
     public AdminDTO getAdminByCedula(String cedula) {
         return adminRepository.findByCedula(cedula).orElseThrow(() -> new AdminNotFoundException("admin","cedula",cedula));
     }
+
+    @Override
+    public AdminDTO PutContrasenia(Long id, String password) { return adminRepository.PutContrasenia(id,password).orElseThrow(() -> new AdminNotFoundException("admin","admin id",id)); }
 }
