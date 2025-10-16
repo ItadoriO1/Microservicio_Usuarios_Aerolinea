@@ -1,5 +1,6 @@
 package com.example.servicio1.domain.service;
 
+import com.example.servicio1.clients.NotificationClient;
 import com.example.servicio1.domain.dto.PersonaDTO;
 import com.example.servicio1.domain.repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class PersonaService {
     public Optional<PersonaDTO> getPersonaById(Long id){ return personaRepository.findById(id); }
 
     //Guardar una Persona
-    public PersonaDTO savePersona(PersonaDTO persona){ return personaRepository.save(persona); }
+    public PersonaDTO savePersona(PersonaDTO persona){return personaRepository.save(persona);}
 
     //Actualizar una Persona existente
     public PersonaDTO updatePersona(PersonaDTO persona){

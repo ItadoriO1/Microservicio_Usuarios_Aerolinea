@@ -1,5 +1,6 @@
 package com.example.servicio1.persistence.serviceImpl;
 
+import com.example.servicio1.clients.NotificationClient;
 import com.example.servicio1.domain.dto.AdminDTO;
 import com.example.servicio1.domain.repository.AdminRepository;
 import com.example.servicio1.domain.service.AdminService;
@@ -13,6 +14,9 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminRepository adminRepository;
 
+    @Autowired
+    private NotificationClient notificationClient;
+
     @Override
     public Iterable<AdminDTO> getAllAdmins() {
         return adminRepository.findAll();
@@ -25,6 +29,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDTO saveAdmin(AdminDTO admin) {
+        notificationClient.enviarNotificacion(String.valueOf(admin.getId()),admin.getEmail(),admin.getNombre());
         return adminRepository.save(admin);
     }
 

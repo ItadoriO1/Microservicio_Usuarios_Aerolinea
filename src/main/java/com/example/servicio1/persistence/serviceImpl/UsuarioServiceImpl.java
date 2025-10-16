@@ -1,5 +1,6 @@
 package com.example.servicio1.persistence.serviceImpl;
 
+import com.example.servicio1.clients.NotificationClient;
 import com.example.servicio1.domain.dto.UsuarioDTO;
 import com.example.servicio1.domain.repository.UsuarioRepository;
 import com.example.servicio1.domain.service.UsuarioService;
@@ -14,6 +15,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private NotificationClient notificationClient;
 
     @Override
     public Iterable<UsuarioDTO> getAllUsuarios() {
@@ -31,6 +35,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDTO saveUsuario(UsuarioDTO usuario) {
+        notificationClient.enviarNotificacion(String.valueOf(usuario.getId()),usuario.getEmail(),usuario.getNombre());
         return usuarioRepository.save(usuario);
     }
 
