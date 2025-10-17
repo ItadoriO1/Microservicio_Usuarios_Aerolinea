@@ -1,5 +1,6 @@
 package com.example.servicio1.web.controller;
 
+import com.example.servicio1.domain.dto.LoginRequest;
 import com.example.servicio1.domain.dto.PersonaDTO;
 import com.example.servicio1.domain.service.PersonaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -103,5 +104,36 @@ public class PersonaController {
     public ResponseEntity<Long> countPersonas(){
         long count = personaService.countPersonas();
         return ResponseEntity.ok(count);
+    }
+
+    //Obtener una persona por email
+    @Operation(summary = "Obtener una persona por email", description = "Retorna una persona segun el email proporcionado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Persona encontrada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PersonaDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Persona no encontrada", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @GetMapping("/email/{email}")
+    public ResponseEntity<PersonaDTO> getPersonaByEmail(@PathVariable @Parameter(description = "Email de la persona") String email){
+        Optional<PersonaDTO> personaOpt = personaService.getPersonaByEmail(email);
+        PersonaDTO personaDTO = personaOpt.orElseThrow(
+                () -> new RuntimeException("No se encontro el persona con el email " + email)
+        );
+        return  ResponseEntity.ok(personaDTO);
+    }
+
+    @Operation(summary = "Verificar si existe una persona por email y contraseña", description = "Verifica en el sistema si existe una persona con email y contraseña proporcionada")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login exitoso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = PersonaDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciales inválidas", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Usuario no encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @PostMapping("/login")
+    public ResponseEntity<PersonaDTO> login(@RequestBody @Parameter(description = "Credenciales de login") LoginRequest loginRequest) {
+        PersonaDTO personaDTO = personaService.authenticate(loginRequest);
+        return  ResponseEntity.ok(personaDTO);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.servicio1.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -31,6 +32,8 @@ public class PersonaDTO {
     private String email;
 
     private String rol;
+
+    @JsonIgnore
     @NotBlank(message = "La contraseña no puede estar vacia")
     private String contrasenia;
 }
