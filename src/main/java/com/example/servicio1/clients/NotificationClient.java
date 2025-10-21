@@ -11,19 +11,22 @@ public class NotificationClient {
 
     public NotificationClient() {
         this.webClient = WebClient.builder()
-                .baseUrl("http://localhost:8080/ServicioNotificaciones/api/notificaciones/save")
+                .baseUrl("http://localhost:8080/ServicioNotificaciones/api/notificaciones")
                 .build();
     }
 
-    public void enviarNotificacion(String person_id, String email, String nombre) {
+    public void enviarNotificacion(String personId, String email, String nombre) {
         NotificacionRequest notificacion = new NotificacionRequest(
-                person_id,
+                personId,
                 email,
                 "Registro exitoso",
                 "Hola " + nombre + ", tu cuenta ha sido creada con éxito."
         );
 
+        System.out.println("➡️ Enviando notificación: " + notificacion);
+
         webClient.post()
+                .uri("/save")
                 .bodyValue(notificacion)
                 .retrieve()
                 .bodyToMono(Void.class)

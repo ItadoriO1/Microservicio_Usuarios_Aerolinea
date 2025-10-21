@@ -35,8 +35,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDTO saveUsuario(UsuarioDTO usuario) {
-        notificationClient.enviarNotificacion(String.valueOf(usuario.getId()),usuario.getEmail(),usuario.getNombre());
-        return usuarioRepository.save(usuario);
+        UsuarioDTO newUsuario = usuarioRepository.save(usuario);
+        notificationClient.enviarNotificacion(String.valueOf(newUsuario.getId()),newUsuario.getEmail(),newUsuario.getNombre());
+        return newUsuario;
     }
 
     @Override

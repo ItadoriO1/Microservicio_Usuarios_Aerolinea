@@ -29,8 +29,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDTO saveAdmin(AdminDTO admin) {
-        notificationClient.enviarNotificacion(String.valueOf(admin.getId()),admin.getEmail(),admin.getNombre());
-        return adminRepository.save(admin);
+        AdminDTO newAdmin = adminRepository.save(admin);
+        notificationClient.enviarNotificacion(String.valueOf(newAdmin.getId()),newAdmin.getEmail(),newAdmin.getNombre());
+        return newAdmin;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class PersonaDTO {
 
     private String rol;
 
-    @JsonIgnore
+
     @NotBlank(message = "La contraseña no puede estar vacia")
     private String contrasenia;
 }

@@ -30,8 +30,9 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public EmpleadoDTO saveEmpleado(EmpleadoDTO empleadoDTO) {
-        notificationClient.enviarNotificacion(String.valueOf(empleadoDTO.getId()),empleadoDTO.getEmail(),empleadoDTO.getNombre());
-        return empleadoRepository.save(empleadoDTO);
+        EmpleadoDTO newEmpleado = empleadoRepository.save(empleadoDTO);
+        notificationClient.enviarNotificacion(String.valueOf(newEmpleado.getId()),newEmpleado.getEmail(),newEmpleado.getNombre());
+        return newEmpleado;
     }
 
     @Override
