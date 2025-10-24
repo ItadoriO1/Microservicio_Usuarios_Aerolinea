@@ -55,21 +55,14 @@ public class PersonaService {
     //Autentificar persona
     public PersonaDTO authenticate(LoginRequest loginRequest){
         Optional<PersonaDTO> optionalPersonaDTO = personaRepository.findByEmail(loginRequest.getEmail());
-        // 1. Manejo: Email no encontrado -> Lanza excepción específica
         if (optionalPersonaDTO.isEmpty()){
-            // Esto le dice al Controller que devuelva 404 o 401.
             throw new UsernameNotFoundException("Usuario no encontrado.");
         }
         PersonaDTO personaDTO = optionalPersonaDTO.get();
-        // 2. Comparación de la contraseña
         boolean esValida = passwordEncoder.matches(loginRequest.getPassword(), personaDTO.getContrasenia());
-        // 3. Manejo: Contraseña incorrecta -> Lanza excepción específica
         if (!esValida){
-            // Esto le dice al Controller que devuelva 401 Unauthorized.
             throw new BadCredentialsException("Contraseña inválida.");
         }
-        // 4. Limpieza y Éxito
-        // Por seguridad, siempre limpia la contraseña antes de devolver el DTO al exterior
         personaDTO.setContrasenia(null);
         return personaDTO;
     }

@@ -1,5 +1,6 @@
 package com.example.servicio1.web.controller;
 
+import com.example.servicio1.configs.token.JwtUtil;
 import com.example.servicio1.domain.dto.LoginRequest;
 import com.example.servicio1.domain.dto.PersonaDTO;
 import com.example.servicio1.domain.service.PersonaService;
@@ -10,9 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,6 +29,9 @@ public class PersonaController {
     @Autowired
     private PersonaService personaService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // Obtener todas las personas
     @Operation(summary = "obtener todas las personas", description = "Retorna una lista de las personas registradas")
     @ApiResponses(value = {
@@ -32,6 +39,7 @@ public class PersonaController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
     })
     @GetMapping("/all")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Iterable<PersonaDTO>> getAllPersonas(){
         Iterable<PersonaDTO> personas = personaService.getAllPersonas();
         return ResponseEntity.ok(personas);
@@ -132,8 +140,15 @@ public class PersonaController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
     })
     @PostMapping("/login")
-    public ResponseEntity<PersonaDTO> login(@RequestBody @Parameter(description = "Credenciales de login") LoginRequest loginRequest) {
+    public ResponseEntity<PersonaDTO> login(@RequestBody @Parameter(description = "Credenciales de login") LoginRequest loginRequest, HttpServletResponse response) {
         PersonaDTO personaDTO = personaService.authenticate(loginRequest);
+        String token = jwtUtil.generateToken(personaDTO.getEmail(), personaDTO.getRol(), personaDTO.getId());
+        Cookie cookie = new Cookie("JWT_TOKEN", token);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // cambiar a true en producción con HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(1 * 60 * 60); // 1 hora
+        response.addCookie(cookie);
         return  ResponseEntity.ok(personaDTO);
     }
 }
