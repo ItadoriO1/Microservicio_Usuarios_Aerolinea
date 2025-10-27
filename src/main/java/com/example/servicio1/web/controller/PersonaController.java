@@ -151,4 +151,21 @@ public class PersonaController {
         response.addCookie(cookie);
         return  ResponseEntity.ok(personaDTO);
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<PersonaDTO> getCurrentUser(
+            @CookieValue(value = "JWT_TOKEN", required = false) String token) {
+        if (token == null || !jwtUtil.isTokenValid(token)) {
+            // No hay token o es inválido → 401 Unauthorized
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // Extraer ID de la persona desde el token
+        Long id = jwtUtil.extractId(token);
+        // Buscar persona en la base de datos
+        PersonaDTO persona = personaService.getPersonaById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        // Retornar la persona
+        return ResponseEntity.ok(persona);
+    }
+
 }

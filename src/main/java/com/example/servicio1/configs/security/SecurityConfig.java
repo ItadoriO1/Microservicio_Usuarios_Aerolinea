@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Todos los endpoints que terminan en login o save son públicos
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/personas/login", "/api/usuarios/save", "/api/admins/save").permitAll()
+                        .requestMatchers("/api/personas/login", "/api/usuarios/save", "/api/admins/save", "/api/personas/me").permitAll()
                         // Cualquier otro requiere autenticación
                         .anyRequest().authenticated()
                 )
