@@ -27,7 +27,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         // Ignorar endpoints públicos
-        if (path.matches(".*/api/personas/login$") || path.matches(".*/api/usuarios/save$") || path.matches(".*/api/admins/save$") || path.matches(".*/api/personas/me$")) {
+        if (path.matches(".*/api/personas/login$") ||
+                path.matches(".*/api/usuarios/save$") ||
+                path.matches(".*/api/admins/save$") ||
+                path.matches(".*/api/personas/me$") ||
+                path.matches(".*/api/personas/email/[^/]+$") ||
+                path.matches(".*/api/personas/update/\\d+$") ||
+                path.matches(".*/api/personas/updatePassword/\\d+$")) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -79,7 +79,7 @@ public class UsuarioController {
     }
 
     //Actualizar contraseña de un usuario por ID
-    @Operation(summary = "Actualizar contraseña de usuario por ID", description = "Actualiza la contraseña de um usuaio existente")
+    @Operation(summary = "Actualizar contraseña de usuario por ID", description = "Actualiza la contraseña de un usuaio existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente", content =  @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioDTO.class))),
             @ApiResponse(responseCode = "400", description = "Solicitud invalida", content = @Content),

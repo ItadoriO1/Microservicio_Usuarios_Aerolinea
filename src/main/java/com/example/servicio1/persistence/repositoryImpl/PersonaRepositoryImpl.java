@@ -2,12 +2,14 @@ package com.example.servicio1.persistence.repositoryImpl;
 
 import com.example.servicio1.domain.dto.PersonaDTO;
 import com.example.servicio1.domain.repository.PersonaRepository;
+import com.example.servicio1.exceptions.AdminNotFoundException;
 import com.example.servicio1.persistence.crud.PersonaCrudRepository;
 import com.example.servicio1.persistence.entity.Persona;
 import com.example.servicio1.persistence.mapper.PersonaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,13 +54,22 @@ public class PersonaRepositoryImpl implements PersonaRepository {
     }
 
     @Override
+    @Transactional
     public PersonaDTO update(PersonaDTO personaDTO) {
-        Persona persona = personaMapper.toEntity(personaDTO);
-        if(existsById(persona.getId())){
-            Persona updatePersona = personaCrudRepository.save(persona);
-            return personaMapper.toDTO(updatePersona);
-        }
-        throw new IllegalArgumentException("El registro no existe");
+        Persona personaExistente = personaCrudRepository.findById(personaDTO.getId())
+                .orElseThrow(() -> new IllegalArgumentException("El registro no existe"));
+
+        // Actualizamos solo los campos permitidos
+        personaExistente.setNombre(personaDTO.getNombre());
+        personaExistente.setApellido(personaDTO.getApellido());
+        personaExistente.setCedula(personaDTO.getCedula());
+        personaExistente.setTelefono(personaDTO.getTelefono());
+        personaExistente.setEmail(personaDTO.getEmail());
+        personaExistente.setContrasenia(personaDTO.getContrasenia());
+        personaExistente.setRol(Persona.Rol.valueOf(personaDTO.getRol()));
+        Persona personaActualizada = personaCrudRepository.save(personaExistente);
+
+        return personaMapper.toDTO(personaActualizada);
     }
 
     @Override
@@ -90,5 +101,23 @@ public class PersonaRepositoryImpl implements PersonaRepository {
     public Optional<PersonaDTO> findByCedula(String cedula) {
         Optional<Persona> persona = personaCrudRepository.findByCedula(cedula);
         return persona.map(personaMapper::toDTO);
+    }
+
+    @Override
+    public Optional<PersonaDTO> PutContrasenia(long id, String contrasenia) {
+        validatePersonaExists(id);
+        return personaCrudRepository.findById(id).map(persona -> {
+            String hashed = passwordEncoder.encode(contrasenia);
+            persona.setContrasenia(hashed);
+            Persona updatedPersona = personaCrudRepository.save(persona);
+            return personaMapper.toDTO(updatedPersona); // conviertes a DTO
+        });
+    }
+
+
+    private void validatePersonaExists(long id) {
+        if(!existsById(id)){
+            throw new IllegalArgumentException("El registro no existe");
+        }
     }
 }

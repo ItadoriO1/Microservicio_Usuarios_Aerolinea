@@ -16,7 +16,7 @@ public class WebConfig {
         // Origenes permitidos (tu frontend Angula
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         // Métodos HTTP permitidos
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         // Headers permitidos (puedes ajustar si quieres restringir)
         configuration.setAllowedHeaders(Arrays.asList("*"));
         // Permitir credenciales (cookies, auth headers

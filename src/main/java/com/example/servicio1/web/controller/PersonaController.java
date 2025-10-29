@@ -3,6 +3,7 @@ package com.example.servicio1.web.controller;
 import com.example.servicio1.configs.token.JwtUtil;
 import com.example.servicio1.domain.dto.LoginRequest;
 import com.example.servicio1.domain.dto.PersonaDTO;
+import com.example.servicio1.domain.dto.UpdatePasswordRequest;
 import com.example.servicio1.domain.service.PersonaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -90,6 +91,20 @@ public class PersonaController {
         return  ResponseEntity.ok(updatePersonaDTO);
     }
 
+    //Actualizar la contraseña de una persona por ID
+    @Operation(summary = "Actualizar contraseña de un usuario por ID", description = "Actualiza la contraseña de una persona existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Persona actualizada correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PersonaDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Solicitud invalida", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Persona no encontrada", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content)
+    })
+    @PatchMapping("/updatePassword/{id}")
+    public ResponseEntity<PersonaDTO> updatePassword(@PathVariable @Parameter(description = "ID de la persona") long id,
+                                                     @RequestBody @Parameter(description = "Contraseña actualizada")UpdatePasswordRequest updatePasswordRequest){
+        PersonaDTO updatePersona = personaService.PutContrasenia(id,updatePasswordRequest.getPassword());
+        return  ResponseEntity.ok(updatePersona);
+    }
     //Eliminar una persona por ID
     @Operation(summary = "Eliminar una persona por ID", description = "Elimina la persona correspondiente al ID proporcionado")
     @ApiResponses(value = {
@@ -142,7 +157,7 @@ public class PersonaController {
     @PostMapping("/login")
     public ResponseEntity<PersonaDTO> login(@RequestBody @Parameter(description = "Credenciales de login") LoginRequest loginRequest, HttpServletResponse response) {
         PersonaDTO personaDTO = personaService.authenticate(loginRequest);
-        String token = jwtUtil.generateToken(personaDTO.getEmail(), personaDTO.getRol(), personaDTO.getId());
+        String token = jwtUtil.generateToken(personaDTO.getId());
         Cookie cookie = new Cookie("JWT_TOKEN", token);
         cookie.setHttpOnly(true);
         cookie.setSecure(false); // cambiar a true en producción con HTTPS

@@ -1,9 +1,10 @@
 package com.example.servicio1.domain.service;
 
-import com.example.servicio1.clients.NotificationClient;
 import com.example.servicio1.domain.dto.LoginRequest;
 import com.example.servicio1.domain.dto.PersonaDTO;
 import com.example.servicio1.domain.repository.PersonaRepository;
+import com.example.servicio1.persistence.crud.PersonaCrudRepository;
+import com.example.servicio1.persistence.mapper.PersonaMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,6 +20,8 @@ public class PersonaService {
     private PersonaRepository personaRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PersonaCrudRepository personaCrudRepository;
 
     //Obtener todos los registros
     public Iterable<PersonaDTO> getAllPersonas(){ return personaRepository.findAll(); }
@@ -65,5 +68,9 @@ public class PersonaService {
         }
         personaDTO.setContrasenia(null);
         return personaDTO;
+    }
+
+    public PersonaDTO PutContrasenia(Long id, String contrasenia){
+        return personaRepository.PutContrasenia(id,contrasenia).orElseThrow();
     }
 }
